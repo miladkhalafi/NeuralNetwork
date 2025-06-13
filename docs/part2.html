@@ -18,7 +18,8 @@
             background: #fff;
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba
+            (0,0,0,0.1);
         }
         h2, h3, h4 {
             color: #0056b3;
@@ -58,18 +59,40 @@
             margin-top: 20px;
             border-radius: 5px;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 400px; /* Adjust as needed */
+            margin: 20px auto;
+            background-color: #e0f7fa;
+            border: 1px dashed #00bcd4;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        canvas {
+            display: block; /* To remove extra space below canvas */
+            width: 100%; /* Ensure canvas fills its container */
+            height: 200px; /* Fixed height for consistent look */
+        }
     </style>
     <script type="text/javascript" async
         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
     </script>
-    <script>
-        MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
-            }
-        };
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
     <div class="container">
@@ -103,12 +126,20 @@
                 <div class="formula">
                     $$a = \begin{cases} 0 & \text{if } n < 0 \\ 1 & \text{if } n \ge 0 \end{cases}$$
                 </div>
+                <div class="chart-container">
+                    <p>برای نمایش این نمودار، لطفاً کتابخانه Chart.js را به صفحه خود اضافه کرده و تابع <code>createChart('hard-limit-chart', 'Hard Limit', n => (n >= 0 ? 1 : 0), true, -0.5, 1.5);</code> را در بخش JavaScript فعال کنید.</p>
+                    <canvas id="hard-limit-chart"></canvas>
+                </div>
                 <p>این تابع برای دسته‌بندی چیزها به دو گروه (مثلاً بله یا خیر) استفاده می‌شود.</p>
             </li>
             <li><strong>تابع خطی (Linear)</strong>:
                 <p>این تابع خیلی ساده است. خروجی آن دقیقاً برابر با ورودی آن ($n$) است. فرمول آن به صورت زیر است:</p>
                 <div class="formula">
                     $$a = n$$
+                </div>
+                <div class="chart-container">
+                    <p>برای نمایش این نمودار، لطفاً کتابخانه Chart.js را به صفحه خود اضافه کرده و تابع <code>createChart('linear-chart', 'Linear', n => n, false, -5, 5);</code> را در بخش JavaScript فعال کنید.</p>
+                    <canvas id="linear-chart"></canvas>
                 </div>
                 <p>یعنی اگر ورودی 1.6 باشد، خروجی هم 1.6 است.</p>
             </li>
@@ -117,12 +148,84 @@
                 <div class="formula">
                     $$a = \frac{1}{1+e^{-n}}$$
                 </div>
+                <div class="chart-container">
+                    <p>برای نمایش این نمودار، لطفاً کتابخانه Chart.js را به صفحه خود اضافه کرده و تابع <code>createChart('log-sigmoid-chart', 'Log-Sigmoid', n => 1 / (1 + Math.exp(-n)), false, -0.1, 1.1);</code> را در بخش JavaScript فعال کنید.</p>
+                    <canvas id="log-sigmoid-chart"></canvas>
+                </div>
                 <p>این تابع به دلیل اینکه قابلیت "مشتق‌پذیری" دارد (یعنی می‌توانیم نرخ تغییر آن را حساب کنیم)، در شبکه‌هایی که یادگیری انجام می‌دهند، خیلی کاربرد دارد.</p>
             </li>
         </ol>
         <div class="note">
             <p><strong>کاربرد در نرم‌افزار متلب:</strong> نرم‌افزار متلب دستورات خاصی برای استفاده از این توابع انتقال دارد.</p>
         </div>
+
+        <h3>جدول توابع انتقال (بر اساس جدول 2.1)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>نام تابع</th>
+                    <th>رابطه ورودی/خروجی</th>
+                    <th>نماد</th>
+                    <th>تابع متلب</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Hard Limit</td>
+                    <td>$a = \begin{cases} 0 & \text{if } n < 0 \\ 1 & \text{if } n \ge 0 \end{cases}$</td>
+                    <td>hardlim</td>
+                    <td><code>hardlim(n)</code></td>
+                </tr>
+                <tr>
+                    <td>Symmetrical Hard Limit</td>
+                    <td>$a = \begin{cases} -1 & \text{if } n < 0 \\ 1 & \text{if } n \ge 0 \end{cases}$</td>
+                    <td>hardlims</td>
+                    <td><code>hardlims(n)</code></td>
+                </tr>
+                <tr>
+                    <td>Linear</td>
+                    <td>$a = n$</td>
+                    <td>purelin</td>
+                    <td><code>purelin(n)</code></td>
+                </tr>
+                <tr>
+                    <td>Saturating Linear</td>
+                    <td>$a = \begin{cases} 0 & \text{if } n < 0 \\ n & \text{if } 0 \le n \le 1 \\ 1 & \text{if } n > 1 \end{cases}$</td>
+                    <td>satlin</td>
+                    <td><code>satlin(n)</code></td>
+                </tr>
+                <tr>
+                    <td>Symmetric Saturating Linear</td>
+                    <td>$a = \begin{cases} -1 & \text{if } n < -1 \\ n & \text{if } -1 \le n \le 1 \\ 1 & \text{if } n > 1 \end{cases}$</td>
+                    <td>satlins</td>
+                    <td><code>satlins(n)</code></td>
+                </tr>
+                <tr>
+                    <td>Log-Sigmoid</td>
+                    <td>$a = \frac{1}{1+e^{-n}}$</td>
+                    <td>logsig</td>
+                    <td><code>logsig(n)</code></td>
+                </tr>
+                <tr>
+                    <td>Hyperbolic Tangent Sigmoid</td>
+                    <td>$a = \frac{e^n - e^{-n}}{e^n + e^{-n}}$</td>
+                    <td>tansig</td>
+                    <td><code>tansig(n)</code></td>
+                </tr>
+                <tr>
+                    <td>Positive Linear</td>
+                    <td>$a = \begin{cases} 0 & \text{if } n < 0 \\ n & \text{if } n \ge 0 \end{cases}$</td>
+                    <td>poslin</td>
+                    <td><code>poslin(n)</code></td>
+                </tr>
+                <tr>
+                    <td>Competitive</td>
+                    <td>$a_k = 1$ if $n_k$ is max, else $a_k = 0$</td>
+                    <td>compet</td>
+                    <td><code>compet(n)</code></td>
+                </tr>
+            </tbody>
+        </table>
 
         <h2>نرون چند ورودی</h2>
         <p>بر خلاف نرون تک ورودی، یک نرون می‌تواند چندین ورودی داشته باشد.</p>
@@ -339,5 +442,84 @@
             <li>آیا بایاس در هر لایه مورد نیاز است؟</li>
         </ol>
     </div>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+
+        window.onload = function() {
+            // Function to draw a plot using Chart.js
+            function createChart(canvasId, label, dataFunction, step = false, yMin = -0.1, yMax = 1.1) {
+                const ctx = document.getElementById(canvasId);
+                if (ctx) {
+                    const dataPoints = [];
+                    for (let n = -5; n <= 5; n += 0.1) { // Range for n
+                        dataPoints.push({ x: n, y: dataFunction(n) });
+                    }
+
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            datasets: [{
+                                label: label,
+                                data: dataPoints,
+                                borderColor: 'rgb(75, 192, 192)',
+                                borderWidth: 2,
+                                pointRadius: 0, // No points for a continuous line
+                                stepped: step ? 'before' : false // For step-like functions
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false, // Allow custom height
+                            scales: {
+                                x: {
+                                    type: 'linear',
+                                    position: 'bottom',
+                                    title: {
+                                        display: true,
+                                        text: 'n (ورودی شبکه)'
+                                    }
+                                },
+                                y: {
+                                    min: yMin,
+                                    max: yMax,
+                                    title: {
+                                        display: true,
+                                        text: 'a (خروجی)'
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: true
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+
+            // Call createChart for each function type
+            // You need to UNCOMMENT the Chart.js script tag in <head> for these to work.
+            createChart('hard-limit-chart', 'Hard Limit', n => (n >= 0 ? 1 : 0), true, -0.5, 1.5);
+            createChart('linear-chart', 'Linear', n => n, false, -5, 5); // Adjust Y-min/max for linear
+            createChart('log-sigmoid-chart', 'Log-Sigmoid', n => 1 / (1 + Math.exp(-n)), false, -0.1, 1.1);
+
+            // If Chart.js is NOT included, the following messages will show in the placeholders.
+            const placeholders = document.querySelectorAll('.chart-container p');
+            placeholders.forEach(p => {
+                const canvas = p.parentNode.querySelector('canvas');
+                if (!canvas || typeof Chart === 'undefined') { // If canvas not found or Chart.js not loaded
+                    p.style.display = 'block'; // Show the message
+                } else {
+                    p.style.display = 'none'; // Hide the message if chart is drawn
+                }
+            });
+        };
+    </script>
 </body>
 </html>
