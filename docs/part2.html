@@ -88,11 +88,88 @@
             height: 200px; /* Fixed height for consistent look */
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script type="text/javascript" async
         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
 
+        window.onload = function() {
+            // Function to draw a plot using Chart.js
+            function createChart(canvasId, label, dataFunction, step = false, yMin = -0.1, yMax = 1.1) {
+                const ctx = document.getElementById(canvasId);
+                if (ctx) {
+                    const dataPoints = [];
+                    for (let n = -5; n <= 5; n += 0.1) { // Range for n
+                        dataPoints.push({ x: n, y: dataFunction(n) });
+                    }
+
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            datasets: [{
+                                label: label,
+                                data: dataPoints,
+                                borderColor: 'rgb(75, 192, 192)',
+                                borderWidth: 2,
+                                pointRadius: 0, // No points for a continuous line
+                                stepped: step ? 'before' : false // For step-like functions
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false, // Allow custom height
+                            scales: {
+                                x: {
+                                    type: 'linear',
+                                    position: 'bottom',
+                                    title: {
+                                        display: true,
+                                        text: 'n (ورودی شبکه)'
+                                    }
+                                },
+                                y: {
+                                    min: yMin,
+                                    max: yMax,
+                                    title: {
+                                        display: true,
+                                        text: 'a (خروجی)'
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: true
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+
+            createChart('hard-limit-chart', 'Hard Limit', n => (n >= 0 ? 1 : 0), true, -0.5, 1.5);
+            createChart('linear-chart', 'Linear', n => n, false, -5, 5); // Adjust Y-min/max for linear
+            createChart('log-sigmoid-chart', 'Log-Sigmoid', n => 1 / (1 + Math.exp(-n)), false, -0.1, 1.1);
+
+            // If Chart.js is NOT included, the following messages will show in the placeholders.
+            const placeholders = document.querySelectorAll('.chart-container p');
+            placeholders.forEach(p => {
+                const canvas = p.parentNode.querySelector('canvas');
+                if (!canvas || typeof Chart === 'undefined') { // If canvas not found or Chart.js not loaded
+                    p.style.display = 'block'; // Show the message
+                } else {
+                    p.style.display = 'none'; // Hide the message if chart is drawn
+                }
+            });
+        };
+    </script>
 </head>
 <body>
     <div class="container">
@@ -442,84 +519,5 @@
             <li>آیا بایاس در هر لایه مورد نیاز است؟</li>
         </ol>
     </div>
-    <script>
-        MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
-            }
-        };
-
-        window.onload = function() {
-            // Function to draw a plot using Chart.js
-            function createChart(canvasId, label, dataFunction, step = false, yMin = -0.1, yMax = 1.1) {
-                const ctx = document.getElementById(canvasId);
-                if (ctx) {
-                    const dataPoints = [];
-                    for (let n = -5; n <= 5; n += 0.1) { // Range for n
-                        dataPoints.push({ x: n, y: dataFunction(n) });
-                    }
-
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            datasets: [{
-                                label: label,
-                                data: dataPoints,
-                                borderColor: 'rgb(75, 192, 192)',
-                                borderWidth: 2,
-                                pointRadius: 0, // No points for a continuous line
-                                stepped: step ? 'before' : false // For step-like functions
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false, // Allow custom height
-                            scales: {
-                                x: {
-                                    type: 'linear',
-                                    position: 'bottom',
-                                    title: {
-                                        display: true,
-                                        text: 'n (ورودی شبکه)'
-                                    }
-                                },
-                                y: {
-                                    min: yMin,
-                                    max: yMax,
-                                    title: {
-                                        display: true,
-                                        text: 'a (خروجی)'
-                                    }
-                                }
-                            },
-                            plugins: {
-                                legend: {
-                                    display: true
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-
-            // Call createChart for each function type
-            // You need to UNCOMMENT the Chart.js script tag in <head> for these to work.
-            createChart('hard-limit-chart', 'Hard Limit', n => (n >= 0 ? 1 : 0), true, -0.5, 1.5);
-            createChart('linear-chart', 'Linear', n => n, false, -5, 5); // Adjust Y-min/max for linear
-            createChart('log-sigmoid-chart', 'Log-Sigmoid', n => 1 / (1 + Math.exp(-n)), false, -0.1, 1.1);
-
-            // If Chart.js is NOT included, the following messages will show in the placeholders.
-            const placeholders = document.querySelectorAll('.chart-container p');
-            placeholders.forEach(p => {
-                const canvas = p.parentNode.querySelector('canvas');
-                if (!canvas || typeof Chart === 'undefined') { // If canvas not found or Chart.js not loaded
-                    p.style.display = 'block'; // Show the message
-                } else {
-                    p.style.display = 'none'; // Hide the message if chart is drawn
-                }
-            });
-        };
-    </script>
 </body>
 </html>
