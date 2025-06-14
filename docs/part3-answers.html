@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تمرین ۳-۵: شبکه‌های عصبی</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4; 
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: decimal;
+            padding-right: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .math-formula {
+            display: block;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2em;
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #007bff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>تمرین ۳-۵</h1>
+        <p>در این فصل، سه شبکه عصبی مختلف برای تمایز بین موز و آناناس طراحی خواهد شد:</p>
+
+        <div class="section-title">موز:</div>
+        <div class="math-formula">
+            \[ \underline{P}_{\perp}= \begin{bmatrix} -1 \\ 1 \\ -1 \end{bmatrix} \]
+        </div>
+
+        <div class="section-title">آناناس:</div>
+        <div class="math-formula">
+            \[ \underline{P}_{2}= \begin{bmatrix} -1 \\ -1 \\ 1 \end{bmatrix} \]
+        </div>
+
+        <h2>i. یک پرسپترون برای تشخیص این الگوها طراحی کنید.</h2>
+        <p>هدف طراحی یک پرسپترون خطی است که قادر باشد دو بردار زیر را از هم تمایز دهد:</p>
+        <ul>
+            <li><strong>ورودی موز:</strong> $ \underline{P}_{\perp} = [-1, 1, -1] $</li>
+            <li><strong>ورودی آناناس:</strong> $ \underline{P}_{2} = [-1, -1, 1] $</li>
+        </ul>
+
+        <p>فرض کنید خروجی مطلوب برای موز +1 و برای آناناس -1 باشد. بردار وزن را به صورت زیر انتخاب می‌کنیم:</p>
+
+        <div class="math-formula">
+            \[ \mathbf{w} = \underline{P}_{\perp} - \underline{P}_{2} = \begin{bmatrix} 0 \\ 2 \\ -2 \end{bmatrix}, \quad b = 0 \]
+        </div>
+
+        <p>بنابراین، پرسپترون طراحی شده:</p>
+        <div class="math-formula">
+            \[ y = \text{sign}(0 \cdot x_1 + 2 \cdot x_2 - 2 \cdot x_3) \]
+        </div>
+
+        <h2>ii. یک شبکه همینگ برای تشخیص این الگوها طراحی کنید.</h2>
+        <p>شبکه همینگ از **فاصله همینگ** یا **ضرایب همبستگی** برای مقایسه الگوهای ورودی با الگوهای ذخیره شده استفاده می‌کند.</p>
+
+        <p>برای هر ورودی $ X $، ضرب داخلی با هر الگو محاسبه می‌شود:</p>
+
+        <div class="math-formula">
+            \[ D_i = \mathbf{X} \cdot \mathbf{P}_i \]
+        </div>
+
+        <p>الگویی که دارای بیشترین ضرب داخلی است، به عنوان خروجی انتخاب می‌شود.</p>
+
+        <h2>iii. یک شبکه هاپفیلد برای تشخیص این الگوها طراحی کنید.</h2>
+        <p>در شبکه هاپفیلد، ماتریس وزن از طریق الگوهای آموزشی به صورت زیر محاسبه می‌شود:</p>
+
+        <div class="math-formula">
+            \[ W = \sum_{k=1}^{p} \mathbf{P}_k \cdot \mathbf{P}_k^T \]
+        </div>
+
+        <p>برای دو الگو:</p>
+        <div class="math-formula">
+            \[ W = \begin{bmatrix}
+            2 & 0 & 0 \\
+            0 & 2 & -2 \\
+            0 & -2 & 2
+            \end{bmatrix} \Rightarrow 
+            \begin{bmatrix}
+            0 & 0 & 0 \\
+            0 & 0 & -2 \\
+            0 & -2 & 0
+            \end{bmatrix} \text{(صفر کردن قطر)}
+            \]
+        </div>
+
+        <h2>iv. عملکرد شبکه‌های خود را با اعمال الگوهای ورودی مختلف آزمایش کنید. مزایا و معایب هر شبکه را مورد بحث قرار دهید.</h2>
+
+        <table>
+            <tr>
+                <th>شبکه</th>
+                <th>مزایا</th>
+                <th>معایب</th>
+            </tr>
+            <tr>
+                <td>پرسپترون</td>
+                <td>سادگی، سرعت بالا، مناسب برای الگوهای خطی</td>
+                <td>تنها برای الگوهای خطی مناسب، نیازمند آموزش</td>
+            </tr>
+            <tr>
+                <td>همینگ</td>
+                <td>تشخیص دقیق بر اساس شباهت، بدون نظارت</td>
+                <td>حساس به نویز، فقط برای الگوهای مشابه</td>
+            </tr>
+            <tr>
+                <td>هاپفیلد</td>
+                <td>حافظه انجمنی، بازیابی الگوهای ناقص، بهینه‌سازی</td>
+                <td>پیچیدگی محاسباتی، ممکن است به حالت محلی همگرا شود</td>
+            </tr>
+        </table>
+
+        <h3>نتیجه گیری</h3>
+        <p>هر سه شبکه قادرند موز و آناناس را از هم تشخیص دهند، اما نوع کاربرد آنها متفاوت است:</p>
+        <ul>
+            <li><strong>پرسپترون:</strong> مناسب برای مسائل ساده و خطی.</li>
+            <li><strong>همینگ:</strong> برای تشخیص نزدیک‌ترین الگو بدون آموزش.</li>
+            <li><strong>هاپفیلد:</strong> برای بازیابی الگوهای ناقص یا آلوده به نویز.</li>
+        </ul>
+    </div>
+</body>
+</html>
