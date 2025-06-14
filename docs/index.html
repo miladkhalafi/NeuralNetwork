@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه اصلی</title>
+    <!-- Importing Vazirmatn font for Persian text -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+            direction: rtl; /* Set text direction to right-to-left for Persian */
+            text-align: right; /* Align text to the right */
+        }
+        /* Container for main content */
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        /* Styling for headings */
+        h1, h2, h3, h4 {
+            color: #0056b3;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+        /* Styling for lists */
+        ul {
+            list-style-type: square;
+            padding-right: 20px; /* Adjust padding for RTL */
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: right; /* Align table content to the right */
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #0056b3;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        /* Center align images within the container */
+        .image-container {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .image-container img {
+            max-width: 100%; /* Ensure image is responsive */
+            height: auto;
+            border-radius: 5px; /* Rounded corners for images */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for images */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>به صفحه اصلی خوش آمدید</h1>
+        <p>
+            این صفحه فهرست مطالب و لینک‌های مهمی را برای شما فراهم می‌کند. می‌توانید از جدول زیر برای دسترسی به فایل‌های مرتبط استفاده کنید.
+        </p>
+
+        <h2>فهرست مطالب</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>عنوان</th>
+                    <th>توضیحات</th>
+                    <th>لینک</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>فصل اول</td>
+                    <td>به صورت خلاصه شده</td>
+                    <td><a href="part1.html">مشاهده فایل part1.html</a></td>
+                </tr>
+                <tr>
+                    <td>فصل دوم</td>
+                    <td>این فایل شامل تمریناتی در مورد مدل نرون و معماری شبکه عصبی است.</td>
+                    <td><a href="part2.html">مشاهده فایل part2.html</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+</body>
+</html>
